@@ -92,9 +92,29 @@
 						<th>{{$user->email}}</th>
 						<th>{{$user->contact->mobile}}</th>
 						<th>{{'toot'}}</th>
-						<th><button  onclick="return diaOpen('{{$user->id}}','{{$date}}')" class="btn btn-info">Pay</button>
-						<button style="display:none" disabled="disabled" class="btn btn-info" class="paying">Paying...</button>
-						<button style="display:none" disabled="disabled" class="btn btn-success" class="paid">Payed</button>
+						<th>
+						<!-- condition -->
+
+						@forelse($user->empPayment as $payment)
+							@if( $payment->pay_date == $date)
+							<button style="" disabled="disabled" class="btn btn-success" id="paid_{{$i}}" class="paying">Payed</button>
+							<button style=""  class="btn btn-success" id="edit_{{$i}}" class="paid" onclick="return editDiaOpen('{{$user->id}}','{{$date}}',{{$i}},{{$payment->id}})">Edit</button>
+							
+							@endif
+							@empty
+							<button  onclick="return diaOpen('{{$user->id}}','{{$date}}',{{$i}})" id="pay_{{$i}}" class="btn btn-info">Pay</button>
+							<button style="display:none" disabled="disabled" class="btn btn-info" id="paying_{{$i}}" class="paying">Paying...</button>
+							<button style="display:none" disabled="disabled" class="btn btn-success" id="paid_{{$i}}" class="paid">Payed</button>
+							<button style="display:none"  class="btn btn-success" id="edit_{{$i}}" onclick="" class="paid" >Edit</button>
+						@endforelse
+						@forelse($user->empPayment as $payment)
+							@if($payment->pay_date != $date )
+							<button  onclick="return diaOpen('{{$user->id}}','{{$date}}',{{$i}})" id="pay_{{$i}}" class="btn btn-info">Pay</button>
+							<button style="display:none" disabled="disabled" class="btn btn-info" id="paying_{{$i}}" class="paying">Paying...</button>
+							<button style="display:none" disabled="disabled" class="btn btn-success" id="paid_{{$i}}" class="paid">Payed</button>
+							<button style="display:none"  class="btn btn-success" id="edit_{{$i}}" onclick="" class="paid" >Edit</button>
+							@endif
+						@endforeach
 						</th>
 					</tr>
 					@endforeach

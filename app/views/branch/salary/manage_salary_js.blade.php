@@ -131,20 +131,24 @@ function validatePaySalary()
 		}
 	}
 }
-function diaOpen(id,date)
+//================================== New Payment =================================//
+function diaOpen(id,date,pid)
 {
+	var th = $(this);
 	$.ajax({
 		type:'post',
 		url:"<?php echo URL::to('dynamic/template/sal-pay') ?>",
-		data:{'type':'salDetail','id':id,'date':date},
+		data:{'type':'salDetail','id':id,'date':date,'pid':pid},
 		beforeSend:function()
 		{
-			$(this).next('.paying').show();
-			$(this).hide();
+			// alert(th.attr('class'));
+			$('paying_'+pid).show();
+			$('pay_'+pid).hide();
+			// $(this).hide();
 		},
 		complete:function(){
-			$(this).next('.paying').hide();
-			$(this).next('.paid').show();
+			// $(this).next('.paying').hide();
+			// $(this).next('.paid').show();
 		},
 		success:function(data)
 		{
@@ -156,4 +160,33 @@ function diaOpen(id,date)
 	});
 	
 }
+//============================== End Newpayment ================================//
+// ============================= edit payment =================================//
+function editDiaOpen(id,date,pid,edit_id)
+{
+	var th = $(this);
+	$.ajax({
+		type:'post',
+		url:"<?php echo URL::to('dynamic/template/sal-pay') ?>",
+		data:{'type':'salDetail','id':id,'date':date,'pid':pid,'edit_id':edit_id},
+		beforeSend:function()
+		{
+			
+		},
+		complete:function(){
+			// $(this).next('.paying').hide();
+			// $(this).next('.paid').show();
+		},
+		success:function(data)
+		{
+			$('#dialog').dialog({
+				 width:1000,
+	            height:650,
+			}).html(data);
+		}
+	});
+	
+}
+//============================== end Edit payment =============================//
+
 </script>

@@ -195,6 +195,7 @@
 										$pay_days = $user->empJobDetail->attend[0]->pay_days;
 										$present_days = $user->empJobDetail->attend[0]->present_days;
 										$leave_days = $user->empJobDetail->attend[0]->leave_days;
+										$date = $user->empJobDetail->attend[0]->attend_date;
 										// $lwp = $user->empDetail->attend[0]->lwp;
 										
 										$tot = ($basic / $pay_days) * $present_days;
@@ -204,7 +205,9 @@
 										$tot = $user->empSalary->$ctc_name;
 									}
 							?>
-							<td><input type="text" class="form-control earn" value="{{round($tot)}}" onkeyup="if(isNaN($(this).val())) { $(this).val(''); }return salFun();"></td>
+							<input type="hidden" name="date" value="{{$user->empAttend->attend_date}}">
+							<input type="hidden" name="user_id" value="{{$user->id}}">
+							<td><input type="text" name="{{$ct->component_name}}" class="form-control earn" value="{{round($tot)}}" onkeyup="if(isNaN($(this).val())) { $(this).val(''); }return salFun();"></td>
 						</tr>
 							@endif
 						@endforeach
@@ -226,7 +229,7 @@
 					<tr>
 						<td>{{wordwrap($ct->component_name,20,"<br>",true)}}</td>
 						<td>{{$user->empSalary->$comp}}</td>
-						<td><input type="text" class="form-control deduct" value="{{round($user->empSalary->$comp)}}" onkeyup="if(isNaN($(this).val())) { $(this).val(''); }return salFun();"></td>
+						<td><input type="text" name="{{$ct->component_name}}" class="form-control deduct" value="{{round($user->empSalary->$comp)}}" onkeyup="if(isNaN($(this).val())) { $(this).val(''); }return salFun();"></td>
 					</tr>
 						@endif
 					@endforeach
@@ -249,6 +252,8 @@
 					<td><input type="text" readonly name="net" id="net" class="form-control"></td>
 					<td><button type="submit" class="btn btn-primary" id="save_pay" data-loading-text="loading stuff...">Pay >></button>
 					<button style="display:none" disabled="disabled" onclick="javascript:void(0);" class="btn btn-primary" id="saving_pay" data-loading-text="loading stuff...">Paying... </button></td>
+					<span id="pid" pid="{{$pid}}"></span>
+
 				</tr>
 			</table>
 		</div>
@@ -357,7 +362,30 @@ function saveSal()
 			$('#save_pay').show();
 		},
 		success:function(data){
-			alert(data);
+			var status = $.parseJSON(data);
+			if(status.success)
+			{
+				var ids = $.parseJSON(status.success);
+				var uId = ids.uId;
+				var date = ids.date;
+				var id = ids.eId;
+				$('#dialog').dialog('close');
+				var id = $('#pid').attr('pid');
+				$('#pay_'+id).hide();
+				$('#paying_'+id).hide();
+				$('#paid_'+id).show();
+				$('#edit_'+id).attr('onclick',"return editDiaOpen("+uId+","+date+","+id+")");
+				$('#edit_'+id).show();
+			}
+			else if(status.error)
+			{
+				$('#dialog').dialog('close');
+				// var id = $('#pid').attr('pid');
+				// $('#pay_'+id).hide();
+				// $('#paying_'+id).hide();
+				// $('#paid_'+id).show();
+				// $('#edit_'+id).show();
+			}
 		}
 
 	});

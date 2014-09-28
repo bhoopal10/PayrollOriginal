@@ -25,6 +25,7 @@ class DynamicController extends BaseController
 			{
 				$id =Input::get('id');
 				$date = Input::get('date');
+				$pid = \Input::get('pid');
 				$user = User::where('id','=',$id)
 							->with(array('empAttend'=>function($q) use($date){
 								$q->where('attend_date','=',$date);
@@ -32,6 +33,7 @@ class DynamicController extends BaseController
 							
 				return View::make('template.pay_salary_template')
 								->with('type',$type)
+								->with('pid',$pid)
 								->with('user',$user);
 			}
 

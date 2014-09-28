@@ -28,9 +28,11 @@ class SalaryController extends ControllerBase
 			$client = \Input::get('clientId');
 			$payType = \Input::get('payType');
 			$empId = \Input::get('empId');
+			
 			if($emp_type == 'inhouse')
 			{
 				$uId = \Auth::user()->id;
+
 				$emp = \User::whereHas('empJobDetail',function($q) use($uId,$date){
 								$q->where('emp_type','=','inhouse');
 								$q->whereHas('branch',function($s) use($uId){
@@ -73,8 +75,44 @@ class SalaryController extends ControllerBase
 	 */
 	public function store()
 	{
-		print_r(\Input::all());
-		
+		$uId = \Input::get('user_id');
+		$date = \Input::get('date');
+		$check = \Payment::where('emp_id','=',$uId)
+							->where('pay_date','=',$date)->first();
+		if($check)
+		{
+			echo '{"error":"already exits"}';
+			return;
+		}	
+		else
+		{
+
+			$earn = \Input::get('earned');
+			$deduction = \Input::get('deducted');
+			$net = \Input::get('net');
+			$description = \Input::except('earned','deducted','net','date','date_of_salary','_token','user_id');
+			$description = json_encode($description);
+			$insert = \Payment::insertGetId(array(
+						'emp_id' => $uId,
+						'earning_amount' => $earn,
+						'deducting_amount' => $deduction,
+						'total_amount' => $net,
+						'pay_date' => $date,
+						'description' =>$description
+						));
+			if($insert)
+			{
+				$ids = array('uId'=>$uId,'date'=>$date,'eId'=>$insert);
+				$msg = array('success'=>json_encode($ids));
+				echo json_encode($msg);
+				return;
+			}
+			else
+			{
+				echo '{"error":"already exits"}';
+				return;
+			}
+		}
 	}
 
 
