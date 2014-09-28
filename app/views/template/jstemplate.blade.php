@@ -68,7 +68,7 @@
 			changeYear:true,
 			changeMonth:true,
 			dateFormat:'dd/mm/yy'	
-		});
+			});
 		})
 		</script>
 @endif

@@ -1016,3 +1016,9 @@ if ( ! function_exists('with'))
 		return $object;
 	}
 }
+
+	function ctcComponent()
+	{
+		$ctc = CTCComponent::get();
+		return $ctc;
+	}

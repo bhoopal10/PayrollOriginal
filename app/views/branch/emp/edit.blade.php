@@ -1,8 +1,10 @@
 @extends('layout.main')
 @section('content')
+<?php $uId = $emp->id; ?>
 <div class="main-content">
 	<div class="container">
 		<div class="page-content">
+
 		<!-- heading -->
 			<div class="single-head">
 				<!-- Heading -->
@@ -467,6 +469,18 @@
 									</select>
 								</div><!-- end select -->
 							</div><!-- end form-group -->
+							<div class="form-group">
+								<label for="place_of_posting" class="col-lg-2 control-label">Place of Posting</label>
+								<div class="col-lg-5">
+									<input type="text" name="place_of_posting" id="place_of_posting" placeholder="Place of Posting" class="form-control" value="{{$emp->empJobDetail->place_of_posting}}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="salary_paid_from" class="col-lg-2 control-label">Salary Paid From</label>
+								<div class="col-lg-5">
+									<input type="text" name="salary_paid_from" id="salary_paid_from" placeholder="Salary Paid From" class="form-control" value="{{$emp->empJobDetail->salary_paid_from}}">
+								</div>
+							</div>
 							<!-- end only out source -->
 							{{Form::close()}}
 						</div><!-- end tab-pane -->
@@ -475,14 +489,20 @@
 						<div class="tab-pane fade" id="salarytab">
 						{{Form::open(array('route'=>array('branch.employee.update',2),'method'=>'put','class'=>'form-horizontal','id'=>'salaryForm'))}}
 						<input type="hidden" name="salaryForm" value="1">
-						<input type="hidden" name="salval" id="salval" value="{{$emp->empJobDetail->id}}">
+						<input type="hidden" name="salval" id="salval" value="{{$emp->empSalary->id}}">
 						<h4>Salary Detail <small style="float:right"><a href="javascript:void(0);"  class="label label-danger" onclick="var fId=$('#salval').val();var ids = $(this).parent().parent().parent().attr('id'); return formUpdate(ids,fId)">Update</a></small></h4>
 							<div class="form-group">
 								<label class="col-lg-2 control-label" for="ctc">CTC(Annual)</label>
-									<div class="col-lg-5">
-										<input type="text" name="ctc" value="{{$emp->empJobDetail->ctc or ''}}" id="ctc" placeholder="CTC(Annual)" class="form-control required">
+									<div class="col-lg-2">
+										<input type="text" name="ctc" value="{{$emp->empSalary->annual_ctc or ''}}" id="ctc" placeholder="CTC(Annual)" class="form-control required">
 									</div><!-- end input-form  -->
+									<div id="select-component">
+										
+									</div>
 							</div><!-- end form-group -->
+							<div id="salary-component">
+								
+							</div>
 							{{Form::close()}}
 						</div> <!-- end Tab-pan -->
 						<!-- End Salary detail -->

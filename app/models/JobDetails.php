@@ -25,4 +25,12 @@ class JobDetails extends Eloquent
 	{
 		return $this->hasOne('BranchEmp','emp_id','user_id');
 	}
+	public function attend()
+	{
+		return $this->hasMany('EmpAttendance','emp_id','user_id');
+	}
+	public function payment()
+	{
+		return $this->hasMany('Payment','emp_id','user_id');
+	}
 }

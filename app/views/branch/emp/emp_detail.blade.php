@@ -301,7 +301,15 @@
                                         	<td class="active"><strong>Company Name</strong></td>
                                           	<td><strong>{{$emp->emp->empJobDetail->company->company_name or '' }}</strong></td>
                                     	</tr>
-                                    	@endif
+                                        @endif
+                                        <tr>
+                                            <td class="active"><strong>Place of Posting</strong></td>
+                                            <td><strong>{{$emp->emp->empJobDetail->place_of_posting or '' }}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="active"><strong>Salary Paid From</strong></td>
+                                            <td><strong>{{$emp->emp->empJobDetail->salary_paid_from or '' }}</strong></td>
+                                        </tr>
                                      </table>
                                 </div><!-- end profile details -->
 							</div><!-- end row -->
@@ -315,10 +323,15 @@
 								<div class="col-md-9 col-sm-9">
 									<!-- Profile details -->
                                     <table class="table table-bordered">
-                                        <tr>
-                                        	<td class="active" style="width:400px"><strong>Salary</strong></td>
-                                          	<td><strong>{{$emp->emp->empJobDetail->ctc or ''}}</strong></td>
-                                    	</tr>
+                                        <?php $sal = $emp->emp->empSalary; ?>
+                                       @foreach($sal->toArray() as $key=>$val)
+                                           @if($val)
+                                            <tr>
+                                            	<td class="active" style="width:400px"><strong>{{$key}}</strong></td>
+                                              	<td><strong>{{$val}}</strong></td>
+                                        	</tr>
+                                            @endif
+                                       @endforeach
                                     </table>
                                 </div>
                             </div>

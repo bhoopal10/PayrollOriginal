@@ -24,7 +24,7 @@
 				<div class="page-tabs">
 					<ul class="nav nav-tabs">
 						<li @if(!$error) class="active" @endif id="liViewAll"><a href="#viewAll" class="br-blue" data-toggle="tab"> CTC Component</a></li>
-						<li @if($error) class="active" @endif id="liAddNew"><a href="#addNew" class="br-red" data-toggle="tab"><i class="fa fa-plus red" ></i>Add New</a></li>
+						<!-- <li @if($error) class="active" @endif id="liAddNew"><a href="#addNew" class="br-red" data-toggle="tab"><i class="fa fa-plus red" ></i>Add New</a></li> -->
 					</ul>
 					<div class="tab-content">
 						<div  @if(!$error) class="tab-pane fade active in" @else class="tab-pane fade in" @endif id="viewAll">
@@ -72,7 +72,7 @@
 										<select name="component_type" id="component_type" class="form-control">
 											<option value="earning">Earning</option>
 											<option value="deduction">Deduction</option>
-											<option value="deduction">Statutory</option>
+											<option value="statutory">Statutory</option>
 										</select>
 									</div><!--  end input -->
 								</div><!-- end form-group -->
@@ -123,6 +123,16 @@
 										</select>
 									</div><!--  end input -->
 								</div><!-- end form-group -->
+								<div class="form-group">
+									<label for="is_visible" class="col-lg-2 control-label">Is Visible</label>
+									<div class="col-lg-5">
+										<select name="is_visible" id="is_visible" class="form-control">
+											<option value="yes">YES</option>
+											<option value="no">NO</option>
+										</select>
+									</div><!--  end input -->
+								</div><!-- end form-group -->
+
 								<div class="form-group">
 									<div class="col-md-offset-2 col-md-10">
 										<button type="submit" class="btn btn-info">Add</button>

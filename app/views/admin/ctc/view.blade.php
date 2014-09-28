@@ -6,7 +6,10 @@
 				<th>Component Code</th>
 				<th>Effective Date</th>
 				<th>Component Type</th>
-				<th>Action</th>
+				<th>Default CTC</th>
+				<th>Show in PaySlip</th>
+				<th>Is Active</th>
+				<!-- <th>Action</th> -->
 			</tr>
 				<?php $i=$list->getFrom(); ?>
 				@forelse( $list as $comp)	
@@ -16,8 +19,11 @@
 				<td>{{ $comp->component_name}}</td>
 				<td>{{ $comp->component_code }}</td>
 				<td>{{ date('d-M-Y',strtotime($comp->effective_date))  }}</td>
-				<td>{{ $comp->component_type or '' }}</td>
-				<td>
+				<td>{{ ucfirst($comp->component_type) }}</td>
+				<td>{{ucfirst($comp->show_default)}}</td>
+				<td>{{ucfirst($comp->show_pay_slip)}}</td>
+				<td>{{ucfirst($comp->is_active)}}</td>
+				<!-- <td>
 					<table style="border-left:none!important">
 						<tr>
 							<td style="padding: 0px!important;border-left:none!important;">
@@ -33,11 +39,11 @@
 							</td>
 						</tr>
 					</table>
-				</td>
+				</td> -->
 			</tr>	
 			@empty
 			<tr>
-				<td colspan="6">No list</td>
+				<td colspan="9">No list</td>
 			</tr>
 			
 			@endforelse

@@ -250,6 +250,8 @@ class EmployeeController extends ControllerBase {
 		$emptype            = \Input::get('emptype');
 		$outsourcelist      = \Input::get('outsourcelist');
 		$ctc                = \Input::get('ctc');
+		$place_of_posting   = \Input::get('place_of_posting');
+		$salary_paid_from   = \Input::get('salary_paid_from');
 		$jobdetails         =\JobDetails::insertGetId(array(
 						'user_id'             =>$userId,
 						'joining_date'        =>$jobjoiningdate,
@@ -262,6 +264,8 @@ class EmployeeController extends ControllerBase {
 						'police_verification' =>$policeverification,
 						'emp_type'            =>$emptype,
 						'client_id'           =>$outsourcelist,
+						'place_of_posting'	  =>$place_of_posting,
+						'salary_paid_from' 	  =>$salary_paid_from,
 						'ctc'                 =>$ctc,
 	    			));
 	    if(!$jobdetails)
@@ -270,6 +274,41 @@ class EmployeeController extends ControllerBase {
 			return \Redirect::back()->with('error','Employee not created try again');
 	    }
 		//End Job details
+		// Salary package
+		$ctc                                            = \Input::get('ctc'); 
+		$BASIC                                          = \Input::get('BASIC'); 
+		$CONVEYANCE_ALLOWANCE                           = \Input::get('CONVEYANCE_ALLOWANCE'); 
+		$HRA                                            = \Input::get('HRA'); 
+		$OTHERS                                         = \Input::get('OTHERS'); 
+		$OVER_TIME                                      = \Input::get('OVER_TIME'); 
+		$CANTEEN_BILL                                   = \Input::get('CANTEEN_BILL'); 
+		$EMPLOYEE_STATE_INSURANCE                       = \Input::get('EMPLOYEE_STATE_INSURANCE'); 
+		$PROVIDENT_FUND                                 = \Input::get('PROVIDENT_FUND'); 
+		$PROVIDENT_FUND_EMPLOYER_CONTRIBUTION           = \Input::get('PROVIDENT_FUND_EMPLOYER_CONTRIBUTION'); 
+		$EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION = \Input::get('EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION'); 
+		$MOBILE_REIMBURSEMENT                           = \Input::get('MOBILE_REIMBURSEMENT'); 
+		$salary = \SalaryPackage::insertGetId(array(
+					'user_id'										 => $userId,
+					'annual_ctc'                                     => $ctc, 
+					'BASIC'                                          => $BASIC, 
+					'CONVEYANCE_ALLOWANCE'                           => $CONVEYANCE_ALLOWANCE, 
+					'HRA'                                            => $HRA, 
+					'OTHERS'                                         => $OTHERS, 
+					'OVER_TIME'                                      => $OVER_TIME, 
+					'CANTEEN_BILL'                                   => $CANTEEN_BILL, 
+					'EMPLOYEE_STATE_INSURANCE'                       => $EMPLOYEE_STATE_INSURANCE, 
+					'PROVIDENT_FUND'                                 => $PROVIDENT_FUND, 
+					'PROVIDENT_FUND_EMPLOYER_CONTRIBUTION'           => $PROVIDENT_FUND_EMPLOYER_CONTRIBUTION, 
+					'EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION' => $EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION, 
+					'MOBILE_REIMBURSEMENT'                           => $MOBILE_REIMBURSEMENT 
+					));
+			if(!$salary)
+		    {
+		    	\DB::rollback();
+				return \Redirect::back()->with('error','Employee not created try again');
+		    }
+
+		// End Salary package
 		// start employee Education
 			$schoolname        = \Input::get('schoolname');
 			$schoolplace       = \Input::get('schoolplace');
@@ -365,7 +404,7 @@ class EmployeeController extends ControllerBase {
 		    if($email)
 		    {
 		    	\DB::commit();
-		    	\Mail::send('emails.user_credential',array('name'=>$displayname,'username'=>$username,'password'=>$password),function($message) use($email,$username){
+		    	\Mail::send('emails.user_credential',array('link'=>\URL::to('/'),'name'=>$displayname,'username'=>$username,'password'=>$password),function($message) use($email,$username){
 				$message->to($email,$username)->subject('User Credential');
 			});
 		    	return \Redirect::back()->with('success','Employee successfully created');
@@ -625,6 +664,8 @@ class EmployeeController extends ControllerBase {
 					$hrverification     = \Input::get('hrverification');
 					$policeverification = \Input::get('policeverification');
 					$emptype            = \Input::get('emptype');
+					$place_of_posting	= \Input::get('place_of_posting');
+					$salary_paid_from   = \Input::get('salary_paid_from');
 					$outsourcelist 			= '';
 					if($emptype == 'outsource')
 					{
@@ -640,6 +681,8 @@ class EmployeeController extends ControllerBase {
 						$job->hr_verification     = $hrverification;
 						$job->police_verification = $policeverification;
 						$job->emp_type            = $emptype;
+						$job->place_of_posting	  = $place_of_posting;
+						$job->salary_paid_from	  = $salary_paid_from;
 						$job->client_id           = $outsourcelist;
 					if($job->save())
 					{
@@ -655,9 +698,31 @@ class EmployeeController extends ControllerBase {
 			   // Salary details
 			   if($salval)
 			   {
-			   		$ctc = \Input::get('ctc');
-			   		$salary=\JobDetails::findOrFail($salval);
-			   			$salary->ctc = $ctc;
+			   		$ctc                                            = \Input::get('ctc'); 
+					$BASIC                                          = \Input::get('BASIC'); 
+					$CONVEYANCE_ALLOWANCE                           = \Input::get('CONVEYANCE_ALLOWANCE'); 
+					$HRA                                            = \Input::get('HRA'); 
+					$OTHERS                                         = \Input::get('OTHERS'); 
+					$OVER_TIME                                      = \Input::get('OVER_TIME'); 
+					$CANTEEN_BILL                                   = \Input::get('CANTEEN_BILL'); 
+					$EMPLOYEE_STATE_INSURANCE                       = \Input::get('EMPLOYEE_STATE_INSURANCE'); 
+					$PROVIDENT_FUND                                 = \Input::get('PROVIDENT_FUND'); 
+					$PROVIDENT_FUND_EMPLOYER_CONTRIBUTION           = \Input::get('PROVIDENT_FUND_EMPLOYER_CONTRIBUTION'); 
+					$EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION = \Input::get('EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION'); 
+					$MOBILE_REIMBURSEMENT                           = \Input::get('MOBILE_REIMBURSEMENT'); 
+			   		$salary=\SalaryPackage::findOrFail($salval);
+							$salary->annual_ctc                                     = $ctc;
+							$salary->BASIC                                          = $BASIC;
+							$salary->CONVEYANCE_ALLOWANCE                           = $CONVEYANCE_ALLOWANCE;
+							$salary->HRA                                            = $HRA;
+							$salary->OTHERS                                         = $OTHERS;
+							$salary->OVER_TIME                                      = $OVER_TIME;
+							$salary->CANTEEN_BILL                                   = $CANTEEN_BILL;
+							$salary->EMPLOYEE_STATE_INSURANCE                       = $EMPLOYEE_STATE_INSURANCE;
+							$salary->PROVIDENT_FUND                                 = $PROVIDENT_FUND;
+							$salary->PROVIDENT_FUND_EMPLOYER_CONTRIBUTION           = $PROVIDENT_FUND_EMPLOYER_CONTRIBUTION;
+							$salary->EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION = $EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION;
+							$salary->MOBILE_REIMBURSEMENT                           = $MOBILE_REIMBURSEMENT;
 			   		if($salary->save())
 			   		{
 			   			\Session::flash('success',"Salary successfully updated");

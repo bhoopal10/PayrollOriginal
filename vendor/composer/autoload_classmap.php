@@ -20,6 +20,7 @@ return array(
     'App\\Controller\\Branch\\EmpAttendanceController' => $baseDir . '/app/controllers/branch/EmpAttendanceController.php',
     'App\\Controller\\Branch\\EmployeeController' => $baseDir . '/app/controllers/branch/EmployeeController.php',
     'App\\Controller\\Branch\\IndexController' => $baseDir . '/app/controllers/branch/IndexController.php',
+    'App\\Controller\\Branch\\SalaryController'=> $baseDir . '/app/controllers/branch/SalaryController.php',
     'App\\Controller\\Client\\ControllerBase' => $baseDir . '/app/controllers/client/ControllerBase.php',
     'App\\Controller\\Client\\EmployeeController' => $baseDir . '/app/controllers/client/EmployeeController.php',
     'App\\Controller\\Client\\IndexController' => $baseDir . '/app/controllers/client/IndexController.php',

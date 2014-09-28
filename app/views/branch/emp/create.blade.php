@@ -407,6 +407,18 @@
 					</select>
 				</div><!-- end select -->
 			</div><!-- end form-group -->
+			<div class="form-group">
+				<label for="place_of_posting" class="col-lg-2 control-label">Place of Posting</label>
+				<div class="col-lg-5">
+					<input type="text" name="place_of_posting" id="place_of_posting" placeholder="Place of Posting" class="form-control">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="salary_paid_from" class="col-lg-2 control-label">Salary Paid From</label>
+				<div class="col-lg-5">
+					<input type="text" name="salary_paid_from" id="salary_paid_from" placeholder="Salary Paid From" class="form-control">
+				</div>
+			</div>
 			<!-- end only out source -->
 		</div><!-- end form6 -->
 		<!-- End Job details -->
@@ -415,10 +427,17 @@
 		<div class="form7">
 			<div class="form-group">
 				<label class="col-lg-2 control-label" for="ctc">CTC(Annual)</label>
-					<div class="col-lg-5">
+					<div class="col-lg-2">
 						<input type="text" name="ctc" id="ctc" placeholder="CTC(Annual)" class="form-control required">
 					</div><!-- end input-form  -->
+					<div id="select-component">
+									
+					</div>
+					
 			</div><!-- end form-group -->
+			<div id="salary-component">
+								
+			</div>
 		</div>
 		<!-- End Salary detail -->
 		<!-- Start Educational background -->
@@ -650,6 +669,85 @@
 		});
 
 	});
+	//===================================== CTC Functions ===========================//
+	// salary component
+		$(function(){
+			$.ajax({
+				type:"GET",
+				url:"<?php echo URL::to('home/template/sal-component/default,yes,0'); ?>",
+				beforeSend: function() {
+				        // setting a timeout
+				       $('.loader').show();
+				    },
+				complete: function(){
+						$('.loader').hide();
+				},
+				success:function(data){
+					$('#salary-component').append(data);
+				}
+			});
+		// end salary component
+		// Select salary-component
+			$.ajax({
+					type:"GET",
+					url:"<?php echo URL::to('home/template/sal-component/custom,no,0'); ?>",
+					beforeSend: function() {
+					        // setting a timeout
+					       $('.loader').show();
+					    },
+					complete: function(){
+							$('.loader').hide();
+					},
+					success:function(data){
+						$('#select-component').append(data);
+					}
+			});
+		// end Select salary-component
+	});
+	function AddCTC()
+	{
+		var val = $('#add-ctc').val();
+		if(val)
+		{
+			$.ajax({
+				type:"GET",
+				url:"<?php echo URL::to('home/template/sal-component/field,no,'); ?>"+val,
+				beforeSend: function() {
+				        // setting a timeout
+				       $('.loader').show();
+				    },
+				complete: function(){
+						$('.loader').hide();
+				},
+				success:function(data){
+					$('#ctc-table').append(data);
+					$('#add-ctc option:selected').remove();
+				}
+			});
+		}
+	}
+	function removeCTC()
+	{
+		$(this).parent().parent().parent().remove()
+	}
+	function salCal()
+	{
+		$('.monthly_input').keyup(function(){
+			var val = $(this).val();
+			if(isNaN(val))
+			{
+				$(this).val('');
+			}
+			
+		});
+		var base = $('#BASIC').val();
+		$('#PROVIDENT_FUND_EMPLOYER_CONTRIBUTION').val(base*(13.61/100)).prop('readonly',true);
+		$('#PROVIDENT_FUND').val(base*(12/100)).prop('readonly',true);
+		$('#EMPLOYEE_STATE_INSURANCE').val(base*(1.75/100)).prop('readonly',true);
+		$('#EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION').val(base*(4.75/100)).prop('readonly',true);
+
+	}
+	// ================================ End CTC Functions ============================//
 </script>
 @stop
 				

@@ -56,7 +56,7 @@
 					<li class="has_submenu" id="s_payroll"><a href=""><i class="fa fa-pencil"></i> Manage PayRoll<span class="nav-caret fa fa-caret-down"></span></a>
 						<ul class="list-unstyled">
 							<li><a href="<?php echo URL::to('branch/employee-attendance') ?>"><i class="fa fa-anchor"></i> Attendance</a></li>
-							<li><a href=""><i class=""></i> Salary</a></li>
+							<li><a href="<?php echo URL::to('branch/create-salary') ?>"><i class="fa fa-money"></i> Salary</a></li>
 						</ul>
 					</li>
 					<!-- end dropdown -->

@@ -21,6 +21,9 @@ Route::get('account/create-password','AccountController@getCreatePassword');
 Route::post('account/create-password','AccountController@postCreatePassword');
 Route::get('account/recover/{code}','AccountController@getRecover');
 Route::get('home/template/{code}','HomeController@template');
+Route::get('home/template/sal-component/{code}','HomeController@salaryTemplate');
+Route::get('home/template/sal-edit/{code}','HomeController@salaryEdit');
+Route::post('/dynamic/template/sal-pay','DynamicController@salaryPay');
 
 Route::group(array('before'=>'guest'),function(){
 	Route::get('account/login','AccountController@getLogin');
@@ -50,6 +53,7 @@ Route::group(array('before'=>'branch','prefix'=>'branch'),function(){
 	Route::resource('client','App\Controller\Branch\ClientController');
 	Route::resource('employee','App\Controller\Branch\EmployeeController');
 	Route::resource('employee-attendance','App\Controller\Branch\EmpAttendanceController');
+	Route::resource('create-salary','App\Controller\Branch\SalaryController');
 
 	// Route::controller('/','App\Controller\Branch\IndexController');
 });

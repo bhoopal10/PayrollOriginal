@@ -18,7 +18,7 @@
 					<div class="form-group">
 						<label class="col-lg-2 control-label" for="component_name">Component Name</label>
 						<div class="col-lg-5">
-							<input type="text" id="component_name" name="component_name" placeholder="Component Name" class="form-control" value="{{$comp->component_name or ''}}">
+							<input type="text" disabled="true" id="component_name" name="component_name" placeholder="Component Name" class="form-control" value="{{$comp->component_name or ''}}">
 							<span style="color: red"><!-- error message -->
 	                        @if($errors->has('component_name'))
 	                        {{$errors->first('component_name')}}
@@ -54,6 +54,7 @@
 							<select name="component_type" id="component_type" class="form-control">
 								<option value="earning" @if($comp->component_type == 'earning') selected @endif>Earning</option>
 								<option value="deduction" @if($comp->component_type == 'deduction') selected @endif>Deduction</option>
+								<option value="statutory" @if($comp->component_type == 'statutory') selected @endif>Statutory</option>
 							</select>
 						</div><!--  end input -->
 					</div><!-- end form-group -->
@@ -92,6 +93,24 @@
 							<select name="attendance_dependant" id="attendance_dependant" class="form-control">
 								<option value="yes" @if($comp->attendance_dependant == 'yes') selected @endif>YES</option>
 								<option value="no" @if($comp->attendance_dependant == 'no') selected @endif>NO</option>
+							</select>
+						</div><!--  end input -->
+					</div><!-- end form-group -->
+					<div class="form-group">
+						<label for="ctc_default" class="col-lg-2 control-label">CTC Default</label>
+						<div class="col-lg-5">
+							<select name="ctc_default" id="ctc_default" class="form-control">
+								<option value="yes" @if($comp->show_default == 'yes') selected @endif>YES</option>
+								<option value="no" @if($comp->show_default == 'no') selected @endif>NO</option>
+							</select>
+						</div><!--  end input -->
+					</div><!-- end form-group -->
+					<div class="form-group">
+						<label for="is_visible" class="col-lg-2 control-label">Is Active</label>
+						<div class="col-lg-5">
+							<select name="is_visible" id="is_visible" class="form-control">
+								<option value="yes" @if($comp->is_visible == 'yes') selected @endif>YES</option>
+								<option value="no" @if($comp->is_visible == 'no') selected @endif>NO</option>
 							</select>
 						</div><!--  end input -->
 					</div><!-- end form-group -->
@@ -160,7 +179,7 @@
 			data:$('#CtcEditForm').serialize(),
 			success:function(data){
 				var status = $.parseJSON(data);
-				console.log(status.success);
+				
 				if(status.success)
 				{
 					
@@ -168,7 +187,7 @@
 				}
 				else if(status.error)
 				{
-					alert('Failed to update try again or refresh the browser ');
+					alert(status.error);
 
 				}
 

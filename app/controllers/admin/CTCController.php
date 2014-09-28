@@ -36,6 +36,8 @@ class CTCController extends ControllerBase {
 	{
 		
 		$data = \Input::all();
+		$component_name       = str_replace(' ', '_', $data['component_name']);
+		$data['component_name'] =$component_name;
 		$rule=array('component_name'=>'required|unique:ctc_component',
 					'component_code'=>'required|unique:ctc_component',
 					'effective_date'=>'required',
@@ -51,7 +53,7 @@ class CTCController extends ControllerBase {
 		}
 		else
 		{
-			$component_name       = $data['component_name'];
+			
 			$component_code       = $data['component_code'];
 			$effective_date       = date('Y-m-d',strtotime($data['effective_date']));
 			$component_type       = $data['component_type'];
@@ -59,6 +61,8 @@ class CTCController extends ControllerBase {
 			$formula              = $data['formula'];
 			$show_pay_slip        = $data['show_pay_slip'];
 			$attendance_dependant = $data['attendance_dependant'];
+			$show_default 		  = $data['ctc_show'];
+			$is_visible 		  = $data['is_visible'];
 			// Insertion
 			\DB::beginTransaction();
 			$ctc = \CTCComponent::insert(array(
@@ -69,7 +73,9 @@ class CTCController extends ControllerBase {
 					'calculation_type'     => $calculation_type,
 					'formula'              => $formula,
 					'show_pay_slip'        => $show_pay_slip,
-					'attendance_dependant' => $attendance_dependant
+					'show_default' 		   => $show_default,
+					'attendance_dependant' => $attendance_dependant,
+					'is_active'			   => $is_visible
 				));
 			if(!$ctc)
 			{
@@ -136,7 +142,8 @@ class CTCController extends ControllerBase {
 		{
 			$data =\Input::all();
 			$id = $data['id'];
-			$rule=array('component_name'=>'required|unique:ctc_component,component_name,'.$id,
+			$rule=array(
+					// 'component_name'=>'required|unique:ctc_component,component_name,'.$id,
 					'component_code'=>'required|unique:ctc_component,component_code,'.$id,
 					'effective_date'=>'required',
 					'formula'		=>'required_if:calculation_type,formula');
@@ -151,19 +158,23 @@ class CTCController extends ControllerBase {
 		
 			else
 			{
-				$component_name = $data['component_name'];
+				
 				$component = \CTCComponent::findOrFail($id);
 				// Rename in column in table
-				\Schema::table('salary_package',function($t) use($component,$component_name){
-					$t->renameColumn($component->component_name,$component_name);
-				});
-				$component->component_name   = $data['component_name'];
+				// TODO
+				// \Schema::table('salary_package',function($t) use($component,$component_name){
+				// 	$t->renameColumn($component->component_name,$component_name);
+				// });
+				// TODO
+				// $component->component_name   = $data['component_name'];
 				$component->component_code   = $data['component_code'];
 				$component->effective_date   = date('Y-m-d',strtotime($data['effective_date']));
 				$component->component_type   = $data['component_type'];
 				$component->calculation_type = $data['calculation_type'];
 				$component->formula          = $data['formula'];
 				$component->show_pay_slip    = $data['show_pay_slip'];
+				$component->show_default 	 = $data['ctc_default'];
+				$component->is_active 		 = $data['is_visible'];
 				$component->save();
 
 				\Session::flash('success','Successfully updated');
@@ -184,8 +195,12 @@ class CTCController extends ControllerBase {
 	public function destroy($id)
 	{
 		$del = \CTCComponent::findOrFail($id);
+		$column = $del->component_name;
 		if($del->delete())
 		{
+			\Schema::table('salary_package',function($t) use($column){
+				$t->dropColumn($column);
+			});
 			return \Redirect::back()
 				->with('success','Successfully deleted');
 		}

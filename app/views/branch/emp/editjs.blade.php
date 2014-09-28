@@ -25,9 +25,10 @@
 		$.ajax({
 			type:"PUT",
 			data:datas,
-			url:"<?php echo URL::route('branch.employee.update','"+tableId+"') ?>",
+			url:"<?php echo URL::to('branch/employee/'); ?>/"+tableId,
 			success: function(data){
-				window.location="<?php echo URL::route('branch.employee.index'); ?>";
+				
+				 window.location="<?php echo URL::route('branch.employee.index'); ?>";
 			}
 		});
 	}
@@ -73,6 +74,43 @@
 				});
 				
 		});
+		//========================= Salary component js =========================================//
+		// salary component
+			$.ajax({
+				type:"GET",
+				url:"<?php echo URL::to('home/template/sal-edit/default,'.$uId); ?>",
+				beforeSend: function() {
+				        // setting a timeout
+				       $('.loader').show();
+				    },
+				complete: function(){
+						$('.loader').hide();
+				},
+				success:function(data){
+					$('#salary-component').append(data);
+				}
+			});
+		// end salary component
+		// Select salary-component
+			$.ajax({
+					type:"GET",
+					url:"<?php echo URL::to('home/template/sal-edit/custom,'.$uId); ?>",
+					beforeSend: function() {
+					        // setting a timeout
+					       $('.loader').show();
+					    },
+					complete: function(){
+							$('.loader').hide();
+					},
+					success:function(data){
+						$('#select-component').append(data);
+					}
+			});
+		// end Select salary-component
+		// remove ctc-component
+			
+		// end remove ctc-component
+		//=========================End salary component js ======================================//
 		$('#imageDel').click(function(){
 			var val=$('#imageForm').serializeArray();
 			console.log(val);
@@ -88,7 +126,6 @@
 				contentType: false, 
 				url:"<?php echo URL::to('branch/employee/upload-image'); ?>",
 				data:fd,
-				
 				success:function(data){
 					$('#img-target').html("<img src='"+data+"'/>");
 				}
@@ -100,4 +137,49 @@
 	{
 		alert('ff');
 	}
+	// ===================================== salary component functions ===================================//
+	function AddCTC()
+	{
+		var val = $('#add-ctc').val();
+		if(val)
+		{
+			$.ajax({
+				type:"GET",
+				url:"<?php echo URL::to('home/template/sal-component/field,no,'); ?>"+val,
+				beforeSend: function() {
+				        // setting a timeout
+				       $('.loader').show();
+				    },
+				complete: function(){
+						$('.loader').hide();
+				},
+				success:function(data){
+					$('#ctc-table').append(data);
+					$('#add-ctc option:selected').remove();
+				}
+			});
+		}
+	}
+	function removeCTC()
+	{
+		$(this).parent().parent().parent().remove()
+	}
+	function salCal()
+	{
+		$('.monthly_input').keyup(function(){
+			var val = $(this).val();
+			if(isNaN(val))
+			{
+				$(this).val('');
+			}
+			
+		});
+		var base = $('#BASIC').val();
+		$('#PROVIDENT_FUND_EMPLOYER_CONTRIBUTION').val(base*(13.61/100)).prop('readonly',true);
+		$('#PROVIDENT_FUND').val(base*(12/100)).prop('readonly',true);
+		$('#EMPLOYEE_STATE_INSURANCE').val(base*(1.75/100)).prop('readonly',true);
+		$('#EMPLOYEE_STATE_INSURANCE_EMPLOYER_CONTRIBUTION').val(base*(4.75/100)).prop('readonly',true);
+
+	}
+	//====================================== End salary component function ================================//
 </script>
