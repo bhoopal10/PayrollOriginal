@@ -139,10 +139,12 @@ function diaOpen(id,date)
 		data:{'type':'salDetail','id':id,'date':date},
 		beforeSend:function()
 		{
-			// $(this).button('loading');
+			$(this).next('.paying').show();
+			$(this).hide();
 		},
 		complete:function(){
-			// $(this).button('reset');
+			$(this).next('.paying').hide();
+			$(this).next('.paid').show();
 		},
 		success:function(data)
 		{

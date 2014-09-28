@@ -92,7 +92,10 @@
 						<th>{{$user->email}}</th>
 						<th>{{$user->contact->mobile}}</th>
 						<th>{{'toot'}}</th>
-						<th><button  onclick="return diaOpen('{{$user->id}}','{{$date}}')" class="btn btn-info">Pay</button></th>
+						<th><button  onclick="return diaOpen('{{$user->id}}','{{$date}}')" class="btn btn-info">Pay</button>
+						<button style="display:none" disabled="disabled" class="btn btn-info" class="paying">Paying...</button>
+						<button style="display:none" disabled="disabled" class="btn btn-success" class="paid">Payed</button>
+						</th>
 					</tr>
 					@endforeach
 				</table>

@@ -36,7 +36,7 @@
 </div>
 @endif
 @if($type == 'salDetail')
-{{Form::open(array('method'=>'post','onsubmit'=>'return saveSal()'))}}
+{{Form::open(array('method'=>'post','onsubmit'=>'return saveSal()','id'=>'saveSalForm'))}}
 	<div class="row">
 		<div class="col-lg-6">
 			<div class="form-group">
@@ -247,7 +247,8 @@
 					<td><input type="text" readonly name="deducted" class="form-control" id="deducted"></td>
 					<th class="active">Net Amount</th>
 					<td><input type="text" readonly name="net" id="net" class="form-control"></td>
-					<td><button class="btn btn-primary">Pay >></button></td>
+					<td><button type="submit" class="btn btn-primary" id="save_pay" data-loading-text="loading stuff...">Pay >></button>
+					<button style="display:none" disabled="disabled" onclick="javascript:void(0);" class="btn btn-primary" id="saving_pay" data-loading-text="loading stuff...">Paying... </button></td>
 				</tr>
 			</table>
 		</div>
@@ -340,19 +341,23 @@ function salFun()
 // =================================== Save salary function=====================//
 function saveSal()
 {
-	var datas = $(this).serializeArray();
+	var datas = $('#saveSalForm').serializeArray();
 	$.ajax({
 		type:'post',
-		url:"<?php echo URL::to('') ?>",
+		url:"<?php echo URL::to('branch/create-salary') ?>",
 		data:datas,
 		beforeSend:function(){
-			
+			// $('#save_pay').button('loading')
+			$('#saving_pay').show();
+			$('#save_pay').hide();
 		},
 		complete:function(){
-
+			// $('#save_pay').button('reset')
+			$('#saving_pay').hide();
+			$('#save_pay').show();
 		},
-		success:function(){
-			
+		success:function(data){
+			alert(data);
 		}
 
 	});
