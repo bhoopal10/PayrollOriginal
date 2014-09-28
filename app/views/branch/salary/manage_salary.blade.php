@@ -99,7 +99,7 @@
 							@if( $payment->pay_date == $date)
 							<button style="" disabled="disabled" class="btn btn-success" id="paid_{{$i}}" class="paying">Payed</button>
 							<button style=""  class="btn btn-success" id="edit_{{$i}}" class="paid" onclick="return editDiaOpen('{{$user->id}}','{{$date}}',{{$i}},{{$payment->id}})">Edit</button>
-							
+
 							@endif
 							@empty
 							<button  onclick="return diaOpen('{{$user->id}}','{{$date}}',{{$i}})" id="pay_{{$i}}" class="btn btn-info">Pay</button>
@@ -108,7 +108,7 @@
 							<button style="display:none"  class="btn btn-success" id="edit_{{$i}}" onclick="" class="paid" >Edit</button>
 						@endforelse
 						@forelse($user->empPayment as $payment)
-							@if($payment->pay_date != $date )
+							@if($payment->pay_date != $date && $payment->pay_date == $date)
 							<button  onclick="return diaOpen('{{$user->id}}','{{$date}}',{{$i}})" id="pay_{{$i}}" class="btn btn-info">Pay</button>
 							<button style="display:none" disabled="disabled" class="btn btn-info" id="paying_{{$i}}" class="paying">Paying...</button>
 							<button style="display:none" disabled="disabled" class="btn btn-success" id="paid_{{$i}}" class="paid">Payed</button>
