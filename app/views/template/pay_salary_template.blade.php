@@ -36,6 +36,7 @@
 </div>
 @endif
 @if($type == 'salDetail')
+{{Form::open(array('method'=>'post','onsubmit'=>'return saveSal()'))}}
 	<div class="row">
 		<div class="col-lg-6">
 			<div class="form-group">
@@ -203,7 +204,7 @@
 										$tot = $user->empSalary->$ctc_name;
 									}
 							?>
-							<td><input type="text" class="form-control earn" value="{{round($tot)}}" onkeyup="return salFun()"></td>
+							<td><input type="text" class="form-control earn" value="{{round($tot)}}" onkeyup="if(isNaN($(this).val())) { $(this).val(''); }return salFun();"></td>
 						</tr>
 							@endif
 						@endforeach
@@ -225,7 +226,7 @@
 					<tr>
 						<td>{{wordwrap($ct->component_name,20,"<br>",true)}}</td>
 						<td>{{$user->empSalary->$comp}}</td>
-						<td><input type="text" class="form-control deduct" value="{{round($user->empSalary->$comp)}}"></td>
+						<td><input type="text" class="form-control deduct" value="{{round($user->empSalary->$comp)}}" onkeyup="if(isNaN($(this).val())) { $(this).val(''); }return salFun();"></td>
 					</tr>
 						@endif
 					@endforeach
@@ -241,17 +242,18 @@
 			<table class="table table-bordered">
 				<tr>
 					<th class="active">Total Earned Amount</th>
-					<td><input type="text" readonly name="earned" id="earned"></td>
+					<td><input type="text" readonly name="earned" class="form-control" id="earned"></td>
 					<th class="active">Total Deducted Amount</th>
-					<td><input type="text" readonly name="deducted" id="deducted"></td>
+					<td><input type="text" readonly name="deducted" class="form-control" id="deducted"></td>
 					<th class="active">Net Amount</th>
-					<td><input type="text" readonly name="net" id="net"></td>
+					<td><input type="text" readonly name="net" id="net" class="form-control"></td>
+					<td><button class="btn btn-primary">Pay >></button></td>
 				</tr>
 			</table>
 		</div>
 		
 	</div>
-	
+{{Form::close()}}
 @endif
 <!-- ========================== JAVASCRIPT PART ============================= -->
 @if($type == 'inhouse')
@@ -302,19 +304,62 @@
 @endif
 @if($type == 'salDetail')
 <script type="text/javascript">
-var all = $('.earn');
+var ear = $('.earn');
+var dedu = $('.deduct');
 var totEarn = 0;
-$.each(all,function(k,v){
-		totEarn = $.parseINT(v.value) + $.parseINT(totEarn);
+var totdeduc = 0;
+$.each(ear,function(k,v){
+	var tot = (isNaN(v.value) || !v.value)? 0 : v.value ; 
+		totEarn = parseInt(tot) + parseInt(totEarn);
+	});
+$.each(dedu,function(k,v){
+	var tot = (isNaN(v.value) || !v.value)? 0 : v.value ; 
+		totdeduc = parseInt(tot) + parseInt(totdeduc);
 	});
 $('#earned').val(totEarn);
+$('#deducted').val(totdeduc);
+$('#net').val(totEarn-totdeduc);
 function salFun()
 {
+	var totEarn = 0;
+	var totdeduc = 0;
 	var vals = $('.earn');
+	var dedu = $('.deduct');
 	$.each(vals,function(k,v){
-		console.log(v.value);
+		var tot = (isNaN(v.value) || !v.value)? 0 : v.value ; 
+		totEarn = parseInt(tot) + parseInt(totEarn);
 	});
-	
+	$.each(dedu,function(k,v){
+	var tot = (isNaN(v.value) || !v.value)? 0 : v.value ; 
+		totdeduc = parseInt(tot) + parseInt(totdeduc);
+	});
+	$('#earned').val(totEarn);
+	$('#deducted').val(totdeduc);
+	$('#net').val(totEarn-totdeduc);
 }
+// =================================== Save salary function=====================//
+function saveSal()
+{
+	var datas = $(this).serializeArray();
+	$.ajax({
+		type:'post',
+		url:"<?php echo URL::to('') ?>",
+		data:datas,
+		beforeSend:function(){
+			
+		},
+		complete:function(){
+
+		},
+		success:function(){
+			
+		}
+
+	});
+	return false;
+
+}
+// =================================== End Save salary function=====================//
+
 </script>
 @endif

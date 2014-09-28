@@ -73,7 +73,8 @@ class SalaryController extends ControllerBase
 	 */
 	public function store()
 	{
-		//
+		print_r(\Input::all());
+		
 	}
 
 
